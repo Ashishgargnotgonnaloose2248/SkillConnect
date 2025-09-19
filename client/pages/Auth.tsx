@@ -2,9 +2,8 @@ import { Button } from "@/components/ui/button";
 
 export default function Auth() {
   return (
-    <section className="relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-lavender/20 to-transparent" />
-      <div className="container relative py-20">
+    <section>
+      <div className="container py-20">
         <div className="mx-auto max-w-md rounded-2xl border bg-white p-8 shadow-sm">
           <div className="mb-6 text-center">
             <h1 className="text-2xl font-bold tracking-tight">Welcome to SkillConnect</h1>
@@ -19,7 +18,7 @@ export default function Auth() {
               <label className="text-sm font-medium">Password</label>
               <input type="password" className="mt-1 w-full rounded-xl border px-4 py-3 text-sm focus:ring-2 focus:ring-brand-blue outline-none" placeholder="••••••••" />
             </div>
-            <Button type="submit" variant="gradient" className="w-full">Continue</Button>
+            <Button type="submit" variant="default" className="w-full">Continue</Button>
           </form>
           <div className="mt-6 flex items-center gap-2">
             <div className="h-px flex-1 bg-border" />

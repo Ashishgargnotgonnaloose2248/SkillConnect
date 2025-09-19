@@ -24,7 +24,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-xl bg-brand-gradient" />
+          <div className="h-8 w-8 rounded-xl bg-brand-blue" />
           <span className="text-lg font-bold tracking-tight">SkillConnect</span>
         </Link>
         <nav className="hidden md:flex items-center gap-1">
@@ -37,7 +37,7 @@ export function Navbar() {
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
             <Link to="/auth">Log in</Link>
           </Button>
-          <Button asChild variant="gradient" className="">
+          <Button asChild variant="default" className="">
             <Link to="/explorer">Get Started</Link>
           </Button>
         </div>
@@ -52,7 +52,7 @@ export function Footer() {
       <div className="container py-10 grid gap-6 md:grid-cols-3">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-lg bg-brand-gradient" />
+            <div className="h-6 w-6 rounded-lg bg-brand-blue" />
             <span className="font-semibold">SkillConnect</span>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">

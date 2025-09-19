@@ -25,7 +25,7 @@ export default function SkillCard({ profile }: { profile: SkillProfile }) {
     <div className="group rounded-2xl border bg-card p-5 shadow-sm transition hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-purple to-brand-blue text-white font-semibold">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-blue text-white font-semibold">
             {profile.name.split(" ").map((n) => n[0]).slice(0,2).join("")}
           </div>
           <div>
@@ -55,7 +55,7 @@ export default function SkillCard({ profile }: { profile: SkillProfile }) {
             LinkedIn profile →
           </a>
         ) : <span />}
-        <Button variant="gradient" className="h-10 px-4">Connect</Button>
+        <Button variant="default" className="h-10 px-4">Connect</Button>
       </div>
     </div>
   );

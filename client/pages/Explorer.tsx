@@ -27,7 +27,7 @@ export default function Explorer() {
           <div className="flex gap-2">
             <Button variant="secondary">Online</Button>
             <Button variant="secondary">On-campus</Button>
-            <Button variant="gradient">Filters</Button>
+            <Button variant="secondary">Filters</Button>
           </div>
         </div>
       </div>
