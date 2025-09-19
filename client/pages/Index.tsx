@@ -17,8 +17,8 @@ export default function Index() {
           <div className="absolute -top-48 right-[-10%] h-[420px] w-[420px] rounded-full blur-3xl bg-brand-lavender/30" />
           <div className="absolute -bottom-40 left-[-10%] h-[420px] w-[420px] rounded-full blur-3xl bg-brand-sky/30" />
         </div>
-        <div className="container pb-20 pt-14 md:pb-28 md:pt-20">
-          <div className="grid items-center gap-10 md:grid-cols-2">
+        <div className="container pb-14 pt-10 md:pb-20 md:pt-16">
+          <div className="grid items-center gap-8 md:grid-cols-2">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur">
                 <span className="inline-flex h-2 w-2 rounded-full bg-brand-green" />
@@ -27,10 +27,10 @@ export default function Index() {
               <h1 className="mt-4 text-4xl font-extrabold tracking-tight md:text-5xl">
                 Learn and share skills on campus
               </h1>
-              <p className="mt-4 text-lg text-muted-foreground">
+              <p className="mt-3 text-lg text-muted-foreground">
                 SkillConnect helps students and faculty connect for peer-to-peer learning, mentorship, and real-time sessions.
               </p>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Button asChild variant="default" className="h-12 px-6">
                   <Link to="/explorer">Explore Skills</Link>
                 </Button>
@@ -38,14 +38,14 @@ export default function Index() {
                   <Link to="/auth">Login / Signup</Link>
                 </Button>
               </div>
-              <div className="mt-6 flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-brand-pink" /> Friendly community</div>
                 <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-brand-sky" /> Online + On-campus</div>
                 <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-brand-green" /> Verified emails</div>
               </div>
             </div>
             <div>
-              <div className="relative mx-auto max-w-md rounded-2xl border bg-white p-6 shadow-sm">
+              <div className="relative mx-auto max-w-md rounded-2xl border bg-white p-5 shadow-sm">
                 <div className="grid grid-cols-3 gap-3">
                   <div className="rounded-2xl bg-brand-lavender/20 p-5">
                     <p className="text-xs font-medium text-brand-blue">Peer Learning</p>
@@ -71,19 +71,19 @@ export default function Index() {
       </section>
 
       {/* Feature Cards */}
-      <section className="container py-16">
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+      <section className="container py-10">
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="h-10 w-10 rounded-xl bg-brand-blue" />
             <h3 className="mt-4 font-semibold">Peer Learning</h3>
             <p className="mt-1 text-sm text-muted-foreground">Connect with students willing to teach real skills — from Figma to DSA.</p>
           </div>
-          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="h-10 w-10 rounded-xl bg-brand-sky" />
             <h3 className="mt-4 font-semibold">Faculty Access</h3>
             <p className="mt-1 text-sm text-muted-foreground">Mentorship and consultation hours from your campus faculty.</p>
           </div>
-          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="h-10 w-10 rounded-xl bg-brand-pink" />
             <h3 className="mt-4 font-semibold">AI Assistant</h3>
             <p className="mt-1 text-sm text-muted-foreground">Get quick answers and suggestions tailored to your skills.</p>
@@ -92,17 +92,17 @@ export default function Index() {
       </section>
 
       {/* Stats */}
-      <section className="container py-10">
+      <section className="container py-8">
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border bg-white p-6 text-center">
+          <div className="rounded-2xl border bg-white p-5 text-center">
             <p className="text-3xl font-extrabold text-brand-blue">1.2k+</p>
             <p className="text-sm text-muted-foreground">Active students</p>
           </div>
-          <div className="rounded-2xl border bg-white p-6 text-center">
+          <div className="rounded-2xl border bg-white p-5 text-center">
             <p className="text-3xl font-extrabold text-brand-blue">350+</p>
             <p className="text-sm text-muted-foreground">Skills listed</p>
           </div>
-          <div className="rounded-2xl border bg-white p-6 text-center">
+          <div className="rounded-2xl border bg-white p-5 text-center">
             <p className="text-3xl font-extrabold text-brand-blue">2.8k</p>
             <p className="text-sm text-muted-foreground">Sessions completed</p>
           </div>
@@ -110,18 +110,18 @@ export default function Index() {
       </section>
 
       {/* How it works */}
-      <section className="container py-12">
+      <section className="container py-8">
         <h2 className="text-2xl font-bold">How it works</h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border bg-white p-6">
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border bg-white p-5">
             <p className="text-sm font-medium text-brand-blue">1. Create profile</p>
             <p className="mt-1 text-sm text-muted-foreground">Add skills to teach and learn, plus LinkedIn.</p>
           </div>
-          <div className="rounded-2xl border bg-white p-6">
+          <div className="rounded-2xl border bg-white p-5">
             <p className="text-sm font-medium text-brand-blue">2. Set availability</p>
             <p className="mt-1 text-sm text-muted-foreground">Toggle Online or On-campus and time slots.</p>
           </div>
-          <div className="rounded-2xl border bg-white p-6">
+          <div className="rounded-2xl border bg-white p-5">
             <p className="text-sm font-medium text-brand-blue">3. Connect & learn</p>
             <p className="mt-1 text-sm text-muted-foreground">Use Skill Explorer to find a match and start.</p>
           </div>
@@ -129,12 +129,12 @@ export default function Index() {
       </section>
 
       {/* Featured mentors */}
-      <section className="container py-12">
+      <section className="container py-8">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">Featured mentors</h2>
           <Button asChild variant="secondary"><Link to="/explorer">View all</Link></Button>
         </div>
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((p) => (
             <SkillCard key={p.name} profile={p} />
           ))}
@@ -142,9 +142,9 @@ export default function Index() {
       </section>
 
       {/* CTA Banner */}
-      <section className="py-8">
+      <section className="py-6">
         <div className="container">
-          <div className="relative overflow-hidden rounded-2xl bg-brand-blue p-8 text-white">
+          <div className="relative overflow-hidden rounded-2xl bg-brand-blue p-6 text-white">
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
               <div>
                 <h2 className="text-2xl font-bold">Ready to level up your skills?</h2>
