@@ -1,18 +1,18 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
 
 function NavItem({ to, label }: { to: string; label: string }) {
-  const location = useLocation();
-  const active = location.pathname === to;
   return (
     <NavLink
       to={to}
-      className={cn(
-        "px-3 py-2 rounded-lg text-sm font-medium text-foreground/80 hover:text-foreground",
-        active && "bg-secondary text-foreground"
-      )}
+      className={({ isActive }) =>
+        cn(
+          "px-3 py-2 rounded-lg text-sm font-medium text-foreground/80 hover:text-foreground",
+          isActive && "bg-secondary text-foreground"
+        )
+      }
     >
       {label}
     </NavLink>
@@ -88,11 +88,13 @@ export function Footer() {
   );
 }
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function Layout() {
   return (
     <div className="min-h-dvh flex flex-col bg-background text-foreground">
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );
