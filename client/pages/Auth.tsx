@@ -12,7 +12,7 @@ export default function Auth() {
           <form className="space-y-4">
             <div>
               <label className="text-sm font-medium">Email</label>
-              <input type="email" className="mt-1 w-full rounded-xl border px-4 py-3 text-sm focus:ring-2 focus:ring-brand-blue outline-none" placeholder="you@institute.edu" />
+              <input type="email" className="mt-1 w-full rounded-xl border px-4 py-3 text-sm focus:ring-2 focus:ring-brand-blue outline-none" placeholder="you@mitsgwl.ac.in" />
             </div>
             <div>
               <label className="text-sm font-medium">Password</label>
