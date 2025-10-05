@@ -13,6 +13,8 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
+import Availability from "./pages/Availability";
+import Chats from "./pages/Chats";
 import PlaceholderPage from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,8 @@ const App = () => (
             <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" />} />
             <Route path="/chatbot" element={<PlaceholderPage title="Chatbot" />} />
             <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
+            <Route path="/availability" element={<Availability />} />
+            <Route path="/chats" element={<Chats />} />
             <Route path="/signup" element={<Signup />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

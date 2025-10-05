@@ -40,20 +40,20 @@ export default function Home() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Your Profile</CardTitle>
-                <CardDescription>Update details and availability</CardDescription>
+                <CardTitle>Skills & Availability</CardTitle>
+                <CardDescription>Add skills and set time slots</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button asChild variant="secondary" className="w-full"><Link to="/profile">Go to Profile</Link></Button>
+                <Button asChild variant="secondary" className="w-full"><Link to="/availability">Open</Link></Button>
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Suggested</CardTitle>
-                <CardDescription>Recommended for you</CardDescription>
+                <CardTitle>Chats & Requests</CardTitle>
+                <CardDescription>See received and sent requests</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-sm text-muted-foreground">Coming soon</div>
+                <Button asChild className="w-full"><Link to="/chats">Open</Link></Button>
               </CardContent>
             </Card>
           </div>

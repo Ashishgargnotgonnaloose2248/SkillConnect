@@ -47,7 +47,7 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-1">
           <NavItem to="/explorer" label="Skill Explorer" />
           <NavItem to="/dashboard" label="Dashboard" />
-          <NavItem to="/chatbot" label="Chatbot" />
+          <NavItem to="/chats" label="Chats" />
           <NavItem to="/profile" label="Profile" />
         </nav>
         <div className="flex items-center gap-2">
