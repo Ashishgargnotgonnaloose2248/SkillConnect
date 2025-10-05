@@ -38,7 +38,7 @@ export function Navbar() {
             <Link to="/auth">Log in</Link>
           </Button>
           <Button asChild variant="default" className="">
-            <Link to="/explorer">Get Started</Link>
+            <Link to="/signup">Get Started</Link>
           </Button>
         </div>
       </div>
