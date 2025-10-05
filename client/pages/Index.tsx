@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import SkillCard, { type SkillProfile } from "@/components/SkillCard";
@@ -9,6 +10,17 @@ const featured: SkillProfile[] = [
 ];
 
 export default function Index() {
+  const [firstName, setFirstName] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem("sc_session");
+      if (s) {
+        const u = JSON.parse(s);
+        if (u && typeof u.firstName === "string") setFirstName(u.firstName);
+      }
+    } catch {}
+  }, []);
+
   return (
     <>
       {/* Hero */}
@@ -20,9 +32,17 @@ export default function Index() {
         <div className="container pb-14 pt-10 md:pb-20 md:pt-16">
           <div className="grid items-center gap-8 md:grid-cols-2">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur">
-                <span className="inline-flex h-2 w-2 rounded-full bg-brand-green" />
-                Real-time availability
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur">
+                  <span className="inline-flex h-2 w-2 rounded-full bg-brand-green" />
+                  Real-time availability
+                </div>
+                {firstName && (
+                  <div className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-brand-blue" />
+                    Welcome, <span className="font-semibold text-brand-blue">{firstName}</span>
+                  </div>
+                )}
               </div>
               <h1 className="mt-4 text-4xl font-extrabold tracking-tight md:text-5xl">
                 Learn and share skills on campus
