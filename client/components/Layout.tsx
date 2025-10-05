@@ -52,12 +52,7 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           {firstName ? (
-            <>
-              <span className="hidden sm:inline text-sm text-muted-foreground">Welcome, <span className="font-semibold text-brand-blue">{firstName}</span></span>
-              <Button asChild variant="default">
-                <Link to="/profile">Profile</Link>
-              </Button>
-            </>
+            <span className="hidden sm:inline text-sm text-muted-foreground">Welcome, <span className="font-semibold text-brand-blue">{firstName}</span></span>
           ) : (
             <>
               <Button asChild variant="ghost" className="hidden sm:inline-flex">

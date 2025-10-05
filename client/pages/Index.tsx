@@ -54,9 +54,6 @@ export default function Index() {
                 <Button asChild variant="default" className="h-12 px-6">
                   <Link to="/explorer">Explore Skills</Link>
                 </Button>
-                <Button asChild variant="secondary" className="h-12 px-6">
-                  <Link to="/auth">Login / Signup</Link>
-                </Button>
               </div>
               <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-brand-pink" /> Friendly community</div>
