@@ -25,7 +25,7 @@ export default function Auth() {
       }
       localStorage.setItem("sc_session", JSON.stringify({ firstName: user.firstName, email: user.email }));
       toast({ title: `Welcome, ${user.firstName}!` });
-      navigate("/");
+      navigate("/home");
     } catch {
       toast({ title: "Login error", description: "Please try again." });
     }
