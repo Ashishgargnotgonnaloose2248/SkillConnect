@@ -4,9 +4,30 @@ import { Button } from "@/components/ui/button";
 import StudentCard, { type Student } from "@/components/StudentCard";
 
 const seed: Student[] = [
-  { id: "s1", name: "Aarav Sharma", skills: ["React", "Figma"], available: true, mode: "Online", slots: ["Mon 10:00–12:00", "Wed 16:00–18:00"] },
-  { id: "s2", name: "Priya Verma", skills: ["Python", "Data Science"], available: true, mode: "On-campus", slots: ["Tue 11:00–13:00", "Thu 15:00–17:00"] },
-  { id: "s3", name: "Neha Gupta", skills: ["Video Editing"], available: false, mode: "Online", slots: ["Sat 10:00–12:00"] },
+  {
+    id: "s1",
+    name: "Aarav Sharma",
+    skills: ["React", "Figma"],
+    available: true,
+    mode: "Online",
+    slots: ["Mon 10:00–12:00", "Wed 16:00–18:00"],
+  },
+  {
+    id: "s2",
+    name: "Priya Verma",
+    skills: ["Python", "Data Science"],
+    available: true,
+    mode: "On-campus",
+    slots: ["Tue 11:00–13:00", "Thu 15:00–17:00"],
+  },
+  {
+    id: "s3",
+    name: "Neha Gupta",
+    skills: ["Video Editing"],
+    available: false,
+    mode: "Online",
+    slots: ["Sat 10:00–12:00"],
+  },
 ];
 
 export default function Home() {
@@ -30,10 +51,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    try { localStorage.setItem("sc_students", JSON.stringify(students)); } catch {}
+    try {
+      localStorage.setItem("sc_students", JSON.stringify(students));
+    } catch {}
   }, [students]);
 
-  const availableCount = useMemo(() => students.filter((s) => s.available).length, [students]);
+  const availableCount = useMemo(
+    () => students.filter((s) => s.available).length,
+    [students],
+  );
 
   return (
     <section className="relative overflow-hidden">
@@ -45,8 +71,13 @@ export default function Home() {
       <div className="container pb-14 pt-10 md:pb-20 md:pt-16">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-brand-blue">Students availability</h1>
-            <p className="text-sm text-muted-foreground">{availableCount} available now{firstName ? ` • Welcome, ${firstName}` : ""}</p>
+            <h1 className="text-3xl font-bold tracking-tight text-brand-blue">
+              Students availability
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {availableCount} available now
+              {firstName ? ` • Welcome, ${firstName}` : ""}
+            </p>
           </div>
           <Button asChild>
             <Link to="/chats">Messages</Link>

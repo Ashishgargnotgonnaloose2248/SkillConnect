@@ -11,7 +11,7 @@ function NavItem({ to, label }: { to: string; label: string }) {
       className={({ isActive }) =>
         cn(
           "px-3 py-2 rounded-lg text-sm font-medium text-foreground/80 hover:text-foreground",
-          isActive && "bg-secondary text-foreground"
+          isActive && "bg-secondary text-foreground",
         )
       }
     >
@@ -52,7 +52,10 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           {firstName ? (
-            <span className="hidden sm:inline text-sm text-muted-foreground">Welcome, <span className="font-semibold text-brand-blue">{firstName}</span></span>
+            <span className="hidden sm:inline text-sm text-muted-foreground">
+              Welcome,{" "}
+              <span className="font-semibold text-brand-blue">{firstName}</span>
+            </span>
           ) : (
             <>
               <Button asChild variant="ghost" className="hidden sm:inline-flex">
@@ -79,15 +82,28 @@ export function Footer() {
             <span className="font-semibold">SkillConnect</span>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Learn and share skills across campus. Real-time availability. Peer & faculty mentorship.
+            Learn and share skills across campus. Real-time availability. Peer &
+            faculty mentorship.
           </p>
         </div>
         <div className="text-sm text-muted-foreground">
           <p className="font-semibold text-foreground mb-2">Product</p>
           <ul className="space-y-1">
-            <li><Link to="/explorer" className="hover:text-foreground">Skill Explorer</Link></li>
-            <li><Link to="/dashboard" className="hover:text-foreground">Dashboard</Link></li>
-            <li><Link to="/chatbot" className="hover:text-foreground">Chatbot</Link></li>
+            <li>
+              <Link to="/explorer" className="hover:text-foreground">
+                Skill Explorer
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard" className="hover:text-foreground">
+                Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link to="/chatbot" className="hover:text-foreground">
+                Chatbot
+              </Link>
+            </li>
           </ul>
         </div>
         <div className="text-sm text-muted-foreground">
@@ -100,7 +116,9 @@ export function Footer() {
       </div>
       <div className="border-t">
         <div className="container py-4 text-xs text-muted-foreground flex items-center justify-between">
-          <p>© {new Date().getFullYear()} SkillConnect. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} SkillConnect. All rights reserved.
+          </p>
           <div className="flex items-center gap-2">
             <span className="inline-flex h-2 w-2 rounded-full bg-brand-green" />
             <span>Online</span>

@@ -31,9 +31,18 @@ const App = () => (
             <Route path="/explorer" element={<Explorer />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" />} />
-            <Route path="/chatbot" element={<PlaceholderPage title="Chatbot" />} />
-            <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
+            <Route
+              path="/dashboard"
+              element={<PlaceholderPage title="Dashboard" />}
+            />
+            <Route
+              path="/chatbot"
+              element={<PlaceholderPage title="Chatbot" />}
+            />
+            <Route
+              path="/profile"
+              element={<PlaceholderPage title="Profile" />}
+            />
             <Route path="/availability" element={<Availability />} />
             <Route path="/chats" element={<Chats />} />
             <Route path="/signup" element={<Signup />} />

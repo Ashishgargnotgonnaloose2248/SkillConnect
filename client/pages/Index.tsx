@@ -4,9 +4,28 @@ import { Link } from "react-router-dom";
 import SkillCard, { type SkillProfile } from "@/components/SkillCard";
 
 const featured: SkillProfile[] = [
-  { name: "Aarav Sharma", role: "Student", skills: ["Figma UI", "React"], available: true, mode: "Online", linkedin: "https://linkedin.com" },
-  { name: "Priya Verma", role: "Faculty", skills: ["Data Science", "Python"], available: true, mode: "On-campus" },
-  { name: "Neha Gupta", role: "Student", skills: ["Video Editing"], available: false, mode: "Online" },
+  {
+    name: "Aarav Sharma",
+    role: "Student",
+    skills: ["Figma UI", "React"],
+    available: true,
+    mode: "Online",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    name: "Priya Verma",
+    role: "Faculty",
+    skills: ["Data Science", "Python"],
+    available: true,
+    mode: "On-campus",
+  },
+  {
+    name: "Neha Gupta",
+    role: "Student",
+    skills: ["Video Editing"],
+    available: false,
+    mode: "Online",
+  },
 ];
 
 export default function Index() {
@@ -40,7 +59,10 @@ export default function Index() {
                 {firstName && (
                   <div className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur">
                     <span className="inline-flex h-2 w-2 rounded-full bg-brand-blue" />
-                    Welcome, <span className="font-semibold text-brand-blue">{firstName}</span>
+                    Welcome,{" "}
+                    <span className="font-semibold text-brand-blue">
+                      {firstName}
+                    </span>
                   </div>
                 )}
               </div>
@@ -48,7 +70,8 @@ export default function Index() {
                 Learn and share skills on campus
               </h1>
               <p className="mt-3 text-lg text-muted-foreground">
-                SkillConnect helps students and faculty connect for peer-to-peer learning, mentorship, and real-time sessions.
+                SkillConnect helps students and faculty connect for peer-to-peer
+                learning, mentorship, and real-time sessions.
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Button asChild variant="default" className="h-12 px-6">
@@ -56,29 +79,54 @@ export default function Index() {
                 </Button>
               </div>
               <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-brand-pink" /> Friendly community</div>
-                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-brand-sky" /> Online + On-campus</div>
-                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-brand-green" /> Verified emails</div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-brand-pink" />{" "}
+                  Friendly community
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-brand-sky" /> Online
+                  + On-campus
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-brand-green" />{" "}
+                  Verified emails
+                </div>
               </div>
             </div>
             <div>
               <div className="relative mx-auto max-w-md rounded-2xl border bg-white p-5 shadow-sm">
                 <div className="grid grid-cols-3 gap-3">
                   <div className="rounded-2xl bg-brand-lavender/20 p-5">
-                    <p className="text-xs font-medium text-brand-blue">Peer Learning</p>
-                    <p className="mt-2 text-sm text-muted-foreground">Find students teaching the skills you need.</p>
+                    <p className="text-xs font-medium text-brand-blue">
+                      Peer Learning
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Find students teaching the skills you need.
+                    </p>
                   </div>
                   <div className="rounded-2xl bg-brand-sky/20 p-5">
-                    <p className="text-xs font-medium text-brand-blue">Faculty Access</p>
-                    <p className="mt-2 text-sm text-muted-foreground">Consultation slots and mentorship.</p>
+                    <p className="text-xs font-medium text-brand-blue">
+                      Faculty Access
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Consultation slots and mentorship.
+                    </p>
                   </div>
                   <div className="rounded-2xl bg-brand-pink/20 p-5">
-                    <p className="text-xs font-medium text-brand-blue">AI Assistant</p>
-                    <p className="mt-2 text-sm text-muted-foreground">Get FAQs and skill matches instantly.</p>
+                    <p className="text-xs font-medium text-brand-blue">
+                      AI Assistant
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Get FAQs and skill matches instantly.
+                    </p>
                   </div>
                   <div className="col-span-3 rounded-2xl bg-brand-blue/10 p-5">
-                    <p className="text-sm font-semibold">Your schedule, connected</p>
-                    <p className="text-xs text-muted-foreground">Toggle availability and let others know when to connect.</p>
+                    <p className="text-sm font-semibold">
+                      Your schedule, connected
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Toggle availability and let others know when to connect.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -93,17 +141,24 @@ export default function Index() {
           <div className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="h-10 w-10 rounded-xl bg-brand-blue" />
             <h3 className="mt-4 font-semibold">Peer Learning</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Connect with students willing to teach real skills — from Figma to DSA.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Connect with students willing to teach real skills — from Figma to
+              DSA.
+            </p>
           </div>
           <div className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="h-10 w-10 rounded-xl bg-brand-sky" />
             <h3 className="mt-4 font-semibold">Faculty Access</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Mentorship and consultation hours from your campus faculty.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Mentorship and consultation hours from your campus faculty.
+            </p>
           </div>
           <div className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="h-10 w-10 rounded-xl bg-brand-pink" />
             <h3 className="mt-4 font-semibold">AI Assistant</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Get quick answers and suggestions tailored to your skills.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Get quick answers and suggestions tailored to your skills.
+            </p>
           </div>
         </div>
       </section>
@@ -131,16 +186,28 @@ export default function Index() {
         <h2 className="text-2xl font-bold">How it works</h2>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           <div className="rounded-2xl border bg-white p-5">
-            <p className="text-sm font-medium text-brand-blue">1. Create profile</p>
-            <p className="mt-1 text-sm text-muted-foreground">Add skills to teach and learn, plus LinkedIn.</p>
+            <p className="text-sm font-medium text-brand-blue">
+              1. Create profile
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Add skills to teach and learn, plus LinkedIn.
+            </p>
           </div>
           <div className="rounded-2xl border bg-white p-5">
-            <p className="text-sm font-medium text-brand-blue">2. Set availability</p>
-            <p className="mt-1 text-sm text-muted-foreground">Toggle Online or On-campus and time slots.</p>
+            <p className="text-sm font-medium text-brand-blue">
+              2. Set availability
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Toggle Online or On-campus and time slots.
+            </p>
           </div>
           <div className="rounded-2xl border bg-white p-5">
-            <p className="text-sm font-medium text-brand-blue">3. Connect & learn</p>
-            <p className="mt-1 text-sm text-muted-foreground">Use Skill Explorer to find a match and start.</p>
+            <p className="text-sm font-medium text-brand-blue">
+              3. Connect & learn
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Use Skill Explorer to find a match and start.
+            </p>
           </div>
         </div>
       </section>
@@ -149,7 +216,9 @@ export default function Index() {
       <section className="container py-8">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">Featured mentors</h2>
-          <Button asChild variant="secondary"><Link to="/explorer">View all</Link></Button>
+          <Button asChild variant="secondary">
+            <Link to="/explorer">View all</Link>
+          </Button>
         </div>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((p) => (
@@ -164,10 +233,18 @@ export default function Index() {
           <div className="relative overflow-hidden rounded-2xl bg-brand-blue p-6 text-white">
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
               <div>
-                <h2 className="text-2xl font-bold">Ready to level up your skills?</h2>
-                <p className="text-white/90">Find mentors, set availability, and start learning today.</p>
+                <h2 className="text-2xl font-bold">
+                  Ready to level up your skills?
+                </h2>
+                <p className="text-white/90">
+                  Find mentors, set availability, and start learning today.
+                </p>
               </div>
-              <Button asChild variant="secondary" className="bg-white text-brand-blue hover:bg-white/90">
+              <Button
+                asChild
+                variant="secondary"
+                className="bg-white text-brand-blue hover:bg-white/90"
+              >
                 <Link to="/explorer">Browse Skill Explorer</Link>
               </Button>
             </div>

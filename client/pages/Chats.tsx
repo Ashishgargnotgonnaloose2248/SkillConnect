@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-interface ChatRequest { id: string; from: string; to: string; skill: string; message: string; status: "pending" | "accepted" | "rejected"; }
+interface ChatRequest {
+  id: string;
+  from: string;
+  to: string;
+  skill: string;
+  message: string;
+  status: "pending" | "accepted" | "rejected";
+}
 
 export default function Chats() {
   const [received, setReceived] = useState<ChatRequest[]>([]);
@@ -26,7 +33,9 @@ export default function Chats() {
           </CardHeader>
           <CardContent>
             {received.length === 0 ? (
-              <div className="rounded-xl border p-4 text-sm text-muted-foreground">No requests yet.</div>
+              <div className="rounded-xl border p-4 text-sm text-muted-foreground">
+                No requests yet.
+              </div>
             ) : (
               <ul className="space-y-3">
                 {received.map((r) => (
@@ -34,9 +43,13 @@ export default function Chats() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-medium">{r.from} → You</div>
-                        <div className="text-sm text-muted-foreground">Skill: {r.skill}</div>
+                        <div className="text-sm text-muted-foreground">
+                          Skill: {r.skill}
+                        </div>
                       </div>
-                      <span className="text-xs uppercase tracking-wide text-muted-foreground">{r.status}</span>
+                      <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                        {r.status}
+                      </span>
                     </div>
                     {r.message && <p className="mt-2 text-sm">{r.message}</p>}
                   </li>
@@ -52,7 +65,9 @@ export default function Chats() {
           </CardHeader>
           <CardContent>
             {sent.length === 0 ? (
-              <div className="rounded-xl border p-4 text-sm text-muted-foreground">You haven't sent any requests.</div>
+              <div className="rounded-xl border p-4 text-sm text-muted-foreground">
+                You haven't sent any requests.
+              </div>
             ) : (
               <ul className="space-y-3">
                 {sent.map((r) => (
@@ -60,21 +75,43 @@ export default function Chats() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-medium">You → {r.to}</div>
-                        <div className="text-sm text-muted-foreground">Skill: {r.skill}</div>
+                        <div className="text-sm text-muted-foreground">
+                          Skill: {r.skill}
+                        </div>
                       </div>
-                      <span className="text-xs uppercase tracking-wide text-muted-foreground">{r.status}</span>
+                      <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                        {r.status}
+                      </span>
                     </div>
                     {r.message && <p className="mt-2 text-sm">{r.message}</p>}
                   </li>
                 ))}
               </ul>
             )}
-            <Button className="mt-4" variant="secondary" onClick={() => {
-              const sample: ChatRequest = { id: crypto.randomUUID(), from: "You", to: "Aarav", skill: "React", message: "Hi! Can we connect this week?", status: "pending" };
-              const next = [sample, ...sent];
-              setSent(next);
-              try { localStorage.setItem("sc_requests_sent", JSON.stringify(next)); } catch {}
-            }}>New sample request</Button>
+            <Button
+              className="mt-4"
+              variant="secondary"
+              onClick={() => {
+                const sample: ChatRequest = {
+                  id: crypto.randomUUID(),
+                  from: "You",
+                  to: "Aarav",
+                  skill: "React",
+                  message: "Hi! Can we connect this week?",
+                  status: "pending",
+                };
+                const next = [sample, ...sent];
+                setSent(next);
+                try {
+                  localStorage.setItem(
+                    "sc_requests_sent",
+                    JSON.stringify(next),
+                  );
+                } catch {}
+              }}
+            >
+              New sample request
+            </Button>
           </CardContent>
         </Card>
       </div>
