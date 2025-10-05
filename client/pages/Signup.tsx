@@ -27,6 +27,15 @@ export default function Signup() {
       toast({ title: "Weak password", description: "Use 8+ chars with uppercase, lowercase, number, and symbol." });
       return;
     }
+    const fd = new FormData(e.currentTarget);
+    const firstName = (fd.get("firstName") || "").toString().trim();
+    const lastName = (fd.get("lastName") || "").toString().trim();
+    const email = (fd.get("email") || "").toString().trim();
+    const mobile = (fd.get("mobile") || "").toString().trim();
+    const user = { firstName, lastName, email, mobile, password };
+    try {
+      localStorage.setItem("sc_user", JSON.stringify(user));
+    } catch {}
     toast({ title: "Account created", description: "Please log in to continue." });
     navigate("/auth");
   }
