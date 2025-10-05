@@ -12,6 +12,7 @@ import Explorer from "./pages/Explorer";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
+import Home from "./pages/Home";
 import PlaceholderPage from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/explorer" element={<Explorer />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" />} />
             <Route path="/chatbot" element={<PlaceholderPage title="Chatbot" />} />
             <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
