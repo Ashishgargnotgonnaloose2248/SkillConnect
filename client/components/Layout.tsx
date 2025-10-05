@@ -1,7 +1,8 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 function NavItem({ to, label }: { to: string; label: string }) {
   return (
@@ -20,6 +21,22 @@ function NavItem({ to, label }: { to: string; label: string }) {
 }
 
 export function Navbar() {
+  const location = useLocation();
+  const [firstName, setFirstName] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem("sc_session");
+      if (s) {
+        const u = JSON.parse(s);
+        setFirstName(typeof u?.firstName === "string" ? u.firstName : null);
+      } else {
+        setFirstName(null);
+      }
+    } catch {
+      setFirstName(null);
+    }
+  }, [location.pathname]);
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex h-16 items-center justify-between">
@@ -34,12 +51,23 @@ export function Navbar() {
           <NavItem to="/profile" label="Profile" />
         </nav>
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" className="hidden sm:inline-flex">
-            <Link to="/auth">Log in</Link>
-          </Button>
-          <Button asChild variant="default" className="">
-            <Link to="/signup">Get Started</Link>
-          </Button>
+          {firstName ? (
+            <>
+              <span className="hidden sm:inline text-sm text-muted-foreground">Welcome, <span className="font-semibold text-brand-blue">{firstName}</span></span>
+              <Button asChild variant="default">
+                <Link to="/profile">Profile</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost" className="hidden sm:inline-flex">
+                <Link to="/auth">Log in</Link>
+              </Button>
+              <Button asChild variant="default">
+                <Link to="/signup">Get Started</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
