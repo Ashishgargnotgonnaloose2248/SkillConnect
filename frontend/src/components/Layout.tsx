@@ -1,0 +1,260 @@
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ReactNode } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Brand from "@/components/Brand";
+
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { 
+  BookOpen, 
+  LayoutDashboard, 
+  User, 
+  Settings, 
+  LogOut, 
+  Shield,
+  Calendar,
+  Target,
+  Moon,
+  Sun,
+  Search,
+  GraduationCap
+} from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+
+function NavItem({ to, label, icon: Icon }: { to: string; label: string; icon?: any }) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        cn(
+          "flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+          "text-muted-foreground hover:text-foreground hover:bg-secondary/40",
+          isActive && "bg-secondary text-foreground"
+        )
+      }
+    >
+      {Icon && <Icon className="h-4 w-4 flex-shrink-0" />}
+      <span>{label}</span>
+    </NavLink>
+  );
+}
+
+export function Navbar() {
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  const [dark, setDark] = useState<boolean>(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = stored ? stored === 'dark' : prefersDark;
+    setDark(isDark);
+    document.documentElement.classList.toggle('dark', isDark);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  }, [dark]);
+
+  const submitSearch = () => {
+    const q = query.trim();
+    if (!q) return;
+    navigate(`/explorer?q=${encodeURIComponent(q)}`);
+  };
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-background/80">
+      <div className="container flex h-16 items-center justify-between">
+        {isAuthenticated ? (
+          <>
+            <div className="flex items-center gap-8">
+              <Link to="/" className="flex items-center">
+                <Brand size="lg" />
+              </Link>
+
+              <nav className="hidden md:flex items-center gap-4">
+                <NavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} />
+                <NavItem to="/explorer" label="Explore" icon={BookOpen} />
+                <NavItem to="/sessions" label="Sessions" icon={Calendar} />
+                <NavItem to="/skills" label="Skills" icon={Target} />
+                {user?.role === 'faculty' && (
+                  <NavItem to="/faculty-dashboard" label="Faculty" icon={Shield} />
+                )}
+                {user?.role === 'admin' && (
+                  <NavItem to="/admin" label="Admin" icon={Shield} />
+                )}
+              </nav>
+            </div>
+
+            <div className="flex items-center gap-6">
+              <div className="hidden lg:flex items-center gap-3">
+                <div className="relative">
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(); }}
+                    placeholder="Search skills, users, sessions..."
+                    className="pl-9 pr-4 w-[320px] h-9 rounded-full bg-secondary/50 border-0 focus-visible:ring-1"
+                  />
+                </div>
+                <Button size="sm" onClick={submitSearch} className="h-9 px-4 rounded-full">Search</Button>
+              </div>
+
+              <div className="hidden md:flex items-center gap-2 px-2">
+                <Button variant="ghost" size="icon" onClick={() => setDark(!dark)} className="h-9 w-9">
+                  <Sun className={cn("h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all", dark ? "-rotate-90 scale-0" : "rotate-0 scale-100")} />
+                  <Moon className={cn("absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all", dark ? "rotate-0 scale-100" : "rotate-90 scale-0")} />
+                  <span className="sr-only">Toggle theme</span>
+                </Button>
+              </div>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                    <Avatar className="h-9 w-9 ring-2 ring-background">
+                      <AvatarImage src="" alt={user?.fullName} />
+                      <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                        {user?.fullName?.charAt(0) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{user?.fullName}</p>
+                      <p className="w-[200px] truncate text-sm text-muted-foreground">{user?.email}</p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="flex items-center">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  {user?.role === 'faculty' && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/faculty-dashboard" className="flex items-center">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Faculty Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem asChild>
+                    <Link to="/connect-faculty" className="flex items-center">
+                      <GraduationCap className="mr-2 h-4 w-4" />
+                      Connect to Faculty
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings" className="flex items-center">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  {user?.role === 'admin' && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="flex items-center">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout} className="text-red-600">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center">
+              <Brand size="lg" />
+            </Link>
+            <div className="flex items-center gap-4">
+              <Button asChild variant="ghost">
+                <Link to="/auth">Log in</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/auth">Get Started</Link>
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+export function Footer() {
+  return (
+    <footer className="border-t bg-white">
+      <div className="container py-10 grid gap-6 md:grid-cols-3">
+        <div className="space-y-3">
+          <Brand size="md" />
+          <p className="text-sm text-muted-foreground max-w-sm">
+            Learn and share skills across campus. Real-time availability. Peer & faculty mentorship.
+          </p>
+        </div>
+        <div className="text-sm text-muted-foreground">
+          <p className="font-semibold text-foreground mb-2">Product</p>
+          <ul className="space-y-1">
+            <li><Link to="/explorer" className="hover:text-foreground">Skill Explorer</Link></li>
+            <li><Link to="/dashboard" className="hover:text-foreground">Dashboard</Link></li>
+            <li><Link to="/chatbot" className="hover:text-foreground">Chatbot</Link></li>
+          </ul>
+        </div>
+        <div className="text-sm text-muted-foreground">
+          <p className="font-semibold text-foreground mb-2">Legal</p>
+          <ul className="space-y-1">
+            <li>Privacy</li>
+            <li>Terms</li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t">
+        <div className="container py-4 text-xs text-muted-foreground flex items-center justify-between">
+          <p>© {new Date().getFullYear()} SkillConnect. Built with ❤ at MITS Gwalior.</p>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-2 w-2 rounded-full bg-brand-green" />
+            <span>Online</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export default function Layout({ children }: LayoutProps) {
+  return (
+    <div className="min-h-dvh flex flex-col bg-background text-foreground app-bg">
+      <Navbar />
+      <main className="flex-1">
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
+}
