@@ -37,14 +37,13 @@ function NavItem({ to, label, icon: Icon }: { to: string; label: string; icon?: 
       to={to}
       className={({ isActive }) =>
         cn(
-          "flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-          "text-muted-foreground hover:text-foreground hover:bg-secondary/40",
+          "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-foreground/80 hover:text-foreground",
           isActive && "bg-secondary text-foreground"
         )
       }
     >
-      {Icon && <Icon className="h-4 w-4 flex-shrink-0" />}
-      <span>{label}</span>
+      {Icon && <Icon className="h-4 w-4" />}
+      {label}
     </NavLink>
   );
 }
@@ -76,68 +75,69 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-background/80">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center gap-3 justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          <Brand size="lg" />
+        </Link>
+        
         {isAuthenticated ? (
           <>
-            <div className="flex items-center gap-8">
-              <Link to="/" className="flex items-center">
-                <Brand size="lg" />
-              </Link>
-
-              <nav className="hidden md:flex items-center gap-4">
-                <NavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} />
-                <NavItem to="/explorer" label="Explore" icon={BookOpen} />
-                <NavItem to="/sessions" label="Sessions" icon={Calendar} />
-                <NavItem to="/skills" label="Skills" icon={Target} />
-                {user?.role === 'faculty' && (
-                  <NavItem to="/faculty-dashboard" label="Faculty" icon={Shield} />
-                )}
-                {user?.role === 'admin' && (
-                  <NavItem to="/admin" label="Admin" icon={Shield} />
-                )}
-              </nav>
-            </div>
-
-            <div className="flex items-center gap-6">
-              <div className="hidden lg:flex items-center gap-3">
+            <nav className="hidden md:flex items-center gap-1">
+              <NavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} />
+              <NavItem to="/explorer" label="Explore" icon={BookOpen} />
+              <NavItem to="/sessions" label="Sessions" icon={Calendar} />
+              <NavItem to="/skills" label="Skills" icon={Target} />
+              {user?.role === 'faculty' && (
+                <NavItem to="/faculty-dashboard" label="Faculty" icon={Shield} />
+              )}
+              <NavItem to="/connect-faculty" label="Connect Faculty" icon={GraduationCap} />
+              <NavItem to="/profile" label="Profile" icon={User} />
+              {user?.role === 'admin' && (
+                <NavItem to="/admin" label="Admin" icon={Shield} />
+              )}
+            </nav>
+            
+            <div className="flex items-center gap-3">
+              {/* Global Search */}
+              <div className="hidden md:flex items-center gap-2">
                 <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <Search className="h-4 w-4 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(); }}
                     placeholder="Search skills, users, sessions..."
-                    className="pl-9 pr-4 w-[320px] h-9 rounded-full bg-secondary/50 border-0 focus-visible:ring-1"
+                    className="pl-8 w-[280px]"
                   />
                 </div>
-                <Button size="sm" onClick={submitSearch} className="h-9 px-4 rounded-full">Search</Button>
+                <Button size="sm" onClick={submitSearch}>
+                  Search
+                </Button>
               </div>
 
-              <div className="hidden md:flex items-center gap-2 px-2">
-                <Button variant="ghost" size="icon" onClick={() => setDark(!dark)} className="h-9 w-9">
-                  <Sun className={cn("h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all", dark ? "-rotate-90 scale-0" : "rotate-0 scale-100")} />
-                  <Moon className={cn("absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all", dark ? "rotate-0 scale-100" : "rotate-90 scale-0")} />
-                  <span className="sr-only">Toggle theme</span>
-                </Button>
+              {/* Theme Toggle */}
+              <div className="hidden md:flex items-center gap-2">
+                <Sun className={cn("h-4 w-4", !dark ? "text-primary" : "text-muted-foreground")} />
+                <Switch checked={dark} onCheckedChange={setDark} aria-label="Toggle dark mode" />
+                <Moon className={cn("h-4 w-4", dark ? "text-primary" : "text-muted-foreground")} />
               </div>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                    <Avatar className="h-9 w-9 ring-2 ring-background">
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
                       <AvatarImage src="" alt={user?.fullName} />
-                      <AvatarFallback className="bg-primary/10 text-primary font-medium">
-                        {user?.fullName?.charAt(0) || 'U'}
-                      </AvatarFallback>
+                      <AvatarFallback>{user?.fullName?.charAt(0) || 'U'}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-1 leading-none">
                       <p className="font-medium">{user?.fullName}</p>
-                      <p className="w-[200px] truncate text-sm text-muted-foreground">{user?.email}</p>
+                      <p className="w-[200px] truncate text-sm text-muted-foreground">
+                        {user?.email}
+                      </p>
                     </div>
                   </div>
                   <DropdownMenuSeparator />
@@ -185,18 +185,13 @@ export function Navbar() {
             </div>
           </>
         ) : (
-          <div className="flex items-center gap-4">
-            <Link to="/" className="flex items-center">
-              <Brand size="lg" />
-            </Link>
-            <div className="flex items-center gap-4">
-              <Button asChild variant="ghost">
-                <Link to="/auth">Log in</Link>
-              </Button>
-              <Button asChild>
-                <Link to="/auth">Get Started</Link>
-              </Button>
-            </div>
+          <div className="flex items-center gap-2">
+            <Button asChild variant="ghost" className="hidden sm:inline-flex">
+              <Link to="/auth">Log in</Link>
+            </Button>
+            <Button asChild variant="default">
+              <Link to="/auth">Get Started</Link>
+            </Button>
           </div>
         )}
       </div>

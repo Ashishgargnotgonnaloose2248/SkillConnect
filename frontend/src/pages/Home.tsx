@@ -69,6 +69,44 @@ export default function Home() {
         <div className="absolute left-1/2 top-1/2 -z-10 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-blue/5 blur-2xl" />
       </div>
       <div className="container pb-14 pt-10 md:pb-20 md:pt-16">
+        {/* Hero: left - headline + CTAs; right - peer group image */}
+        <div className="grid gap-8 items-center md:grid-cols-2"> 
+          <div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-brand-blue">
+              Connect. Learn. Grow with SkillConnect.
+            </h1>
+            <p className="mt-3 text-sm text-muted-foreground max-w-xl">
+              Collaborate with peers, discover available mentors, and book sessions in real-time.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild>
+                <Link to="/explorer">Explore Skills</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link to="/dashboard">Go to Dashboard</Link>
+              </Button>
+            </div>
+
+            {/* Mobile fallback: show a smaller illustration under CTAs on small screens */}
+            <div className="mt-6 md:hidden flex justify-center">
+              <img
+                src="/peergroup.jpg"
+                alt="Peer group learning illustration"
+                className="w-48 rounded-lg shadow-md object-contain animate-fade-in-up animate-delay-2"
+              />
+            </div>
+          </div>
+
+          <div className="hidden md:flex justify-end">
+            <img
+              src="/peergroup.jpg"
+              alt="Peer group learning illustration"
+              className="max-w-[420px] w-full rounded-lg shadow-lg object-contain animate-fade-in-up animate-delay-2"
+              style={{ transform: 'translateY(0px)' }}
+            />
+          </div>
+        </div>
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-brand-blue">

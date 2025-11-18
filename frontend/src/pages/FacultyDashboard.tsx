@@ -43,10 +43,10 @@ const FacultyDashboard: React.FC = () => {
   }>>([]);
 
   // Fetch user profile
-  const { data: profile, isLoading } = useQuery<any>({
+  const { data: profile, isLoading } = useQuery({
     queryKey: ['user-profile'],
     queryFn: () => userAPI.getProfile().then(res => res.data.data),
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
       if (data.currentStatus) {
         setLocalStatus(data.currentStatus);
       }
@@ -54,7 +54,7 @@ const FacultyDashboard: React.FC = () => {
         setDailyAvailability(data.dailyAvailability);
       }
     },
-  } as any);
+  });
 
   // Update current status mutation
   const updateStatusMutation = useMutation({

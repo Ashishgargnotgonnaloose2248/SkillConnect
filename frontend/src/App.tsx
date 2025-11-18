@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { Suspense, useEffect, useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import Explorer from "./pages/Explorer";
@@ -55,12 +57,31 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean 
   return <>{children}</>;
 };
 
-const App = () => (
+const App = () => {
+  const [showInitialLoader, setShowInitialLoader] = useState(true);
+
+  useEffect(() => {
+    // Hide loader when the window 'load' event fires (all resources loaded)
+    const onLoad = () => setShowInitialLoader(false);
+    window.addEventListener("load", onLoad);
+
+    // Safety fallback: hide loader after 4s
+    const fallback = setTimeout(() => setShowInitialLoader(false), 4000);
+
+    return () => {
+      window.removeEventListener("load", onLoad);
+      clearTimeout(fallback);
+    };
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        {showInitialLoader && <LoadingScreen />}
+        <Suspense fallback={<LoadingScreen />}>
         <BrowserRouter
           future={{
             v7_startTransition: true,
@@ -149,9 +170,12 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </Suspense>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
 );
+
+};
 
 export default App;

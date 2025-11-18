@@ -198,7 +198,11 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="relative container mx-auto p-6 space-y-6">
+      {/* Decorative faint peer-group watermark */}
+      <div className="pointer-events-none absolute right-6 top-6 -z-10 opacity-5 hidden lg:block" aria-hidden="true">
+        <img src="/peergroup.jpg" alt="" className="max-w-[420px] w-[360px] rounded-full object-cover filter blur-sm" />
+      </div>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

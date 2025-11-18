@@ -75,8 +75,6 @@ export interface Skill {
   createdBy?: string;
   createdAt: string;
   updatedAt: string;
-  // Optional runtime field populated by certain endpoints
-  userCount?: number;
 }
 
 export interface Session {

@@ -177,4 +177,114 @@
   .animate-delay-1 { animation-delay: 120ms; }
   .animate-delay-2 { animation-delay: 240ms; }
   .animate-delay-3 { animation-delay: 360ms; }
+
+  /* Accessible focus-visible outline for keyboard users */
+  :focus { outline: none; }
+  :focus-visible {
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.18); /* soft ring using brand blue */
+    border-radius: 0.375rem;
+  }
+
+  /* sr-only but becomes visible when focused (skip-link pattern) */
+  .sr-only-focusable {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .sr-only-focusable:focus,
+  .sr-only-focusable:active {
+    position: static;
+    width: auto;
+    height: auto;
+    left: auto;
+    clip: auto;
+    padding: .5rem 1rem;
+    background: hsl(var(--brand-blue));
+    color: white;
+    border-radius: .375rem;
+    z-index: 60;
+  }
+
+  /* Gentle float animation for decorative illustrations */
+  @keyframes float-up-down {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+  }
+  .animate-float { animation: float-up-down 6s ease-in-out infinite; }
+
+  /* Hero illustration float animation */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  .animate-float { animation: float 6s ease-in-out infinite; }
+
+  /* Smooth slower jump animation used by the initial loader */
+  @keyframes jump {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+    100% { transform: translateY(0); }
+  }
+  .animate-jump { animation: jump 1.6s ease-in-out infinite; }
+
+  /* Hero illustration gentle float + tilt for a more lively effect */
+  @keyframes hero-zoom {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+  .hero-illustration {
+    animation: hero-zoom 40s cubic-bezier(.25,.8,.25,1) infinite;
+    will-change: transform;
+    transition: box-shadow 360ms ease, transform 360ms cubic-bezier(.2,.9,.2,1);
+    border-radius: 1rem;
+    overflow: hidden;
+    backface-visibility: hidden;
+    transform-origin: center;
+    box-shadow: 0 8px 24px rgba(16,24,40,0.08);
+  }
+  .hero-illustration:hover {
+    transform: scale(1.06);
+    box-shadow: 0 18px 38px rgba(16,24,40,0.13);
+  }
+
+  /* Professional card hover */
+  .card-professional {
+    transition: box-shadow 320ms cubic-bezier(.2,.9,.2,1), transform 320ms cubic-bezier(.2,.9,.2,1);
+    box-shadow: 0 2px 12px rgba(16,24,40,0.06);
+    will-change: transform, box-shadow;
+  }
+  .card-professional:hover, .card-professional:focus-visible {
+    transform: scale(1.018);
+    box-shadow: 0 10px 32px rgba(16,24,40,0.13);
+    z-index: 2;
+  }
+  .hero-illustration:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 10px 26px rgba(16,24,40,0.08);
+  }
+
+  /* Utility: subtle lift for small tiles */
+  .tile-lift {
+    transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms ease, background-color 160ms ease;
+  }
+  .tile-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(16,24,40,0.08);
+  }
+
+  /* Dialog image scale/fade entrance */
+  @keyframes scale-fade-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  /* When dialog content is open, animate images with .modal-img */
+  [data-state='open'] .modal-img {
+    animation: scale-fade-in 260ms cubic-bezier(.2,.9,.2,1) both;
+  }
 }

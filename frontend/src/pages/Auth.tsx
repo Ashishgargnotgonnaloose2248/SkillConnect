@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import  { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,9 +39,51 @@ export default function Auth() {
   const navigate = useNavigate();
   const { login, isAuthenticated, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const formRef = useRef(null);
 
-  // Initialize forms unconditionally at the top level
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, authLoading, navigate]);
+
+  // Handle Google OAuth callback (?token=...&user=base64url)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get("token");
+    const userB64 = params.get("user");
+    if (tokenFromUrl && userB64) {
+      try {
+        const json = atob(userB64.replace(/-/g, "+").replace(/_/g, "/"));
+        const parsedUser = JSON.parse(json);
+        login(tokenFromUrl, parsedUser);
+        // clean the query params
+        const url = new URL(window.location.href);
+        url.search = "";
+        window.history.replaceState({}, "", url.toString());
+        toast.success("Logged in with Google");
+        navigate(parsedUser?.role === 'admin' ? "/admin" : "/dashboard");
+      } catch (e) {
+        console.error(e);
+        toast.error("Failed to process Google login");
+      }
+    }
+  }, [login, navigate]);
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  // Don't render auth form if already authenticated
+  if (isAuthenticated) {
+    return null;
+  }
+
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -62,67 +104,18 @@ export default function Auth() {
     },
   });
 
-  // Handle Google OAuth callback (?token=...&user=base64url)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const tokenFromUrl = params.get("token");
-    const userB64 = params.get("user");
-    if (tokenFromUrl && userB64) {
-      try {
-        // base64url -> base64
-        let b64 = userB64.replace(/-/g, "+").replace(/_/g, "/");
-        // pad with '=' to correct length
-        while (b64.length % 4) b64 += "=";
-        const json = atob(b64);
-        const parsedUser = JSON.parse(json);
-        login(tokenFromUrl, parsedUser);
-        // clean the query params
-        const url = new URL(window.location.href);
-        url.search = "";
-        window.history.replaceState({}, "", url.toString());
-        toast.success("Logged in with Google");
-        if (parsedUser?.role === 'admin') {
-          navigate("/admin");
-        } else if (parsedUser?.role === 'faculty') {
-          navigate("/faculty-dashboard");
-        } else {
-          navigate("/dashboard");
-        }
-      } catch (e) {
-        console.error(e);
-        toast.error("Failed to process Google login");
-      }
-    }
-  }, [login, navigate]);
-
-  // Show loading while checking authentication
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
-  // Don't need to initialize forms again since it's done at the top level
-
-  // Don't render auth form if already authenticated
-  if (isAuthenticated) {
-    return null;
-  }
-
   const onAdminLoginSubmit = async (data: LoginForm) => {
     try {
       setIsLoading(true);
       const response = await authAPI.login(data);
       const { user, token } = response.data.data;
-      // Ensure we retrieve the fresh profile after login (server may elevate role)
-      const fresh = await login(token, user);
-      if ((fresh?.role || user.role) !== 'admin') {
+
+      if (user.role !== 'admin') {
         toast.error("This account does not have admin access");
         return;
       }
 
+      login(token, user);
       toast.success("Admin login successful!");
       navigate("/admin");
     } catch (error: any) {
@@ -137,13 +130,13 @@ export default function Auth() {
       setIsLoading(true);
       const response = await authAPI.login(data);
       const { user, token } = response.data.data;
-      // Fetch fresh profile after login (server may elevate role)
-      const fresh = await login(token, user);
-      if ((fresh?.role || user.role) !== 'faculty') {
+
+      if (user.role !== 'faculty') {
         toast.error("This account does not have faculty access");
         return;
       }
 
+      login(token, user);
       toast.success("Faculty login successful!");
       navigate("/faculty-dashboard");
     } catch (error: any) {
@@ -158,18 +151,11 @@ export default function Auth() {
       setIsLoading(true);
       const response = await authAPI.login(data);
       const { user, token } = response.data.data;
-      const fresh = await login(token, user);
-      const role = fresh?.role || user.role;
-      toast.success("Login successful!");
       
-      // Redirect based on role
-      if (role === 'admin') {
-        navigate("/admin");
-      } else if (role === 'faculty') {
-        navigate("/faculty-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+      login(token, user);
+      toast.success("Login successful!");
+      // Redirect admins to admin dashboard, others to user dashboard
+      navigate(user.role === 'admin' ? "/admin" : "/dashboard");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Login failed");
     } finally {
@@ -184,16 +170,9 @@ export default function Auth() {
       const response = await authAPI.register(registerData);
       const { user, token } = response.data.data;
       
-      const fresh = await login(token, user);
+      login(token, user);
       toast.success("Registration successful!");
-      
-      // Redirect based on role
-      const role = fresh?.role || user.role;
-      if (role === 'faculty') {
-        navigate("/faculty-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+      navigate("/dashboard");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Registration failed");
     } finally {
@@ -210,19 +189,6 @@ export default function Auth() {
       toast.error("Unable to initiate Google login");
     }
   };
-
-  // Render loading or auth state first
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
-  if (isAuthenticated) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
