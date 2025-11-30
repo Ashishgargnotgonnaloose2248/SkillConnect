@@ -25,7 +25,8 @@ import {
   Moon,
   Sun,
   Search,
-  GraduationCap
+  GraduationCap,
+  FolderKanban
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -74,17 +75,16 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-background/80">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:bg-background/80">
       <div className="container flex h-16 items-center gap-3 justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <Brand size="lg" />
-        </Link>
+        <Brand size="lg" />
         
         {isAuthenticated ? (
           <>
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-2 lg:gap-3">
               <NavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} />
               <NavItem to="/explorer" label="Explore" icon={BookOpen} />
+              <NavItem to="/projects" label="Projects" icon={FolderKanban} />
               <NavItem to="/sessions" label="Sessions" icon={Calendar} />
               <NavItem to="/skills" label="Skills" icon={Target} />
               {user?.role === 'faculty' && (
@@ -97,9 +97,9 @@ export function Navbar() {
               )}
             </nav>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 lg:gap-4">
               {/* Global Search */}
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2 lg:gap-3">
                 <div className="relative">
                   <Search className="h-4 w-4 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <Input
@@ -201,7 +201,7 @@ export function Navbar() {
 
 export function Footer() {
   return (
-    <footer className="border-t bg-white">
+    <footer className="border-t border-border bg-background/95 text-foreground">
       <div className="container py-10 grid gap-6 md:grid-cols-3">
         <div className="space-y-3">
           <Brand size="md" />
@@ -225,8 +225,8 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t">
-        <div className="container py-4 text-xs text-muted-foreground flex items-center justify-between">
+      <div className="border-t border-border/70">
+        <div className="container py-4 text-xs text-muted-foreground flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} SkillConnect. Built with ❤ at MITS Gwalior.</p>
           <div className="flex items-center gap-2">
             <span className="inline-flex h-2 w-2 rounded-full bg-brand-green" />

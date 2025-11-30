@@ -246,7 +246,7 @@ export const confirmSession = asyncHandler(async (req, res) => {
 //
 export const cancelSession = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { reason } = req.body;
+  const reason = req.body?.reason;
   const userId = req.user._id;
 
   const session = await Session.findById(id);
@@ -255,8 +255,11 @@ export const cancelSession = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Session not found");
   }
 
+  const isTeacher = session.teacher?.toString() === userId.toString();
+  const isStudent = session.student?.toString() === userId.toString();
+
   // Check if user is part of this session
-  if (session.teacher._id.toString() !== userId && session.student._id.toString() !== userId) {
+  if (!isTeacher && !isStudent) {
     throw new ApiError(403, "You are not authorized to cancel this session");
   }
 
@@ -286,6 +289,37 @@ export const cancelSession = asyncHandler(async (req, res) => {
 });
 
 //
+// 🗑️ DELETE SESSION (only when cancelled)
+//
+export const deleteSession = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user._id?.toString();
+
+  const session = await Session.findById(id);
+
+  if (!session) {
+    throw new ApiError(404, "Session not found");
+  }
+
+  const isTeacher = session.teacher?.toString() === userId;
+  const isStudent = session.student?.toString() === userId;
+
+  if (!isTeacher && !isStudent) {
+    throw new ApiError(403, "You are not authorized to delete this session");
+  }
+
+  if (session.status !== "cancelled") {
+    throw new ApiError(400, "Only cancelled sessions can be deleted");
+  }
+
+  await session.deleteOne();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Session deleted successfully"));
+});
+
+//
 // 🏁 COMPLETE SESSION
 //
 export const completeSession = asyncHandler(async (req, res) => {
@@ -299,8 +333,11 @@ export const completeSession = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Session not found");
   }
 
+  const isTeacher = session.teacher?.toString() === userId.toString();
+  const isStudent = session.student?.toString() === userId.toString();
+
   // Check if user is part of this session
-  if (session.teacher._id.toString() !== userId && session.student._id.toString() !== userId) {
+  if (!isTeacher && !isStudent) {
     throw new ApiError(403, "You are not authorized to complete this session");
   }
 
@@ -309,7 +346,7 @@ export const completeSession = asyncHandler(async (req, res) => {
   }
 
   // Update session based on user role
-  if (session.teacher._id.toString() === userId) {
+  if (isTeacher) {
     session.teacherNotes = notes;
     session.teacherRating = rating;
   } else {
@@ -416,7 +453,7 @@ export const updateSession = asyncHandler(async (req, res) => {
   }
 
   // Check if user is the teacher (only teachers can update session details)
-  if (session.teacher._id.toString() !== userId) {
+  if (session.teacher?.toString() !== userId.toString()) {
     throw new ApiError(403, "Only the teacher can update session details");
   }
 

@@ -12,6 +12,7 @@ import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import Explorer from "./pages/Explorer";
 import Auth from "./pages/Auth";
+import Projects from "./pages/Projects";
 
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
@@ -92,6 +93,7 @@ const App = () => {
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/explorer" element={<Explorer />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/auth" element={<Auth />} />
             
             {/* Protected Routes */}

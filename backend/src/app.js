@@ -30,6 +30,10 @@ const DEFAULT_ALLOWED_ORIGINS = [
   "http://localhost:5174",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
+  "http://localhost:4173",
+  "http://localhost:4174",
+  "http://127.0.0.1:4173",
+  "http://127.0.0.1:4174",
 ];
 
 // Allow overriding via env FRONTEND_URL and either CORS_ORIGINS or CORS_ORIGIN (CSV)
@@ -74,6 +78,8 @@ import skillRouter from "./routes/skill.routes.js";
 import matchingRouter from "./routes/matching.routes.js";
 import sessionRouter from "./routes/session.routes.js"; 
 import adminRouter from "./routes/admin.routes.js";
+import projectRouter from "./routes/project.routes.js";
+import collabRequestRouter from "./routes/collab-request.routes.js";
 
 // --- Use Routes ---
 app.use("/api/v1/healthcheck", healthCheckRouter);
@@ -83,6 +89,8 @@ app.use("/api/v1/skills", skillRouter);
 app.use("/api/v1/matching", matchingRouter);
 app.use("/api/v1/sessions", sessionRouter); 
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/projects", projectRouter);
+app.use("/api/v1/collab-requests", collabRequestRouter);
 
 // --- 404 Fallback Route ---
 app.use( (req, res) => {

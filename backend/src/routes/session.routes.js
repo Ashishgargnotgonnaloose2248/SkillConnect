@@ -9,6 +9,7 @@ import {
   completeSession,
   getSessionStats,
   updateSession,
+  deleteSession,
 } from "../controllers/session.controller.js";
 import { validateSessionCreation, validateSessionUpdate, validateMongoId, validatePagination } from "../validators/index.js";
 
@@ -46,6 +47,10 @@ router.patch("/:id/confirm", validateMongoId, confirmSession);
 // Cancel session
 // PATCH /api/v1/sessions/:id/cancel
 router.patch("/:id/cancel", validateMongoId, cancelSession);
+
+// Delete cancelled session
+// DELETE /api/v1/sessions/:id
+router.delete("/:id", validateMongoId, deleteSession);
 
 // Complete session
 // PATCH /api/v1/sessions/:id/complete

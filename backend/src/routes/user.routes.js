@@ -12,6 +12,7 @@ import {
   updateDailyAvailability,
   getAllFaculty,
 } from "../controllers/user.controller.js";
+import { getIncomingCollabRequests, getUserProjects } from "../controllers/project.controller.js";
 import { validateUserUpdate, validateMongoId, validateSkillId, validatePagination } from "../validators/index.js";
 
 const router = express.Router();
@@ -61,5 +62,13 @@ router.put("/faculty/status", updateCurrentStatus);
 // 📅 Update daily availability (for faculty)
 // PUT /api/v1/user/faculty/availability
 router.put("/faculty/availability", updateDailyAvailability);
+
+// --- Project Collaboration Shortcuts ---
+
+// GET /api/v1/user/projects
+router.get("/projects", getUserProjects);
+
+// GET /api/v1/user/collab-requests
+router.get("/collab-requests", getIncomingCollabRequests);
 
 export default router;

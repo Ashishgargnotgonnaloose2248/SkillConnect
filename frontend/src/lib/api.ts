@@ -72,6 +72,7 @@ export interface Skill {
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   tags: string[];
   isActive: boolean;
+  userCount?: number;
   createdBy?: string;
   createdAt: string;
   updatedAt: string;
@@ -102,6 +103,33 @@ export interface Session {
   cancelledBy?: string;
   cancellationReason?: string;
   cancelledAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ProjectStatus = "in-progress" | "completed";
+
+export interface Project {
+  _id: string;
+  owner: User;
+  title: string;
+  description: string;
+  category: string;
+  techStack: string[];
+  githubLink?: string;
+  status: ProjectStatus;
+  collaborators: User[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CollabRequest {
+  _id: string;
+  projectId: Project;
+  fromUser: User;
+  toUser: User;
+  message?: string;
+  status: "pending" | "accepted" | "rejected";
   createdAt: string;
   updatedAt: string;
 }
@@ -181,6 +209,11 @@ export const userAPI = {
   
   updateDailyAvailability: (dailyAvailability: User['dailyAvailability']) =>
     api.put<ApiResponse<User>>('/user/faculty/availability', { dailyAvailability }),
+
+  getProjects: () => api.get<ApiResponse<Project[]>>('/user/projects'),
+
+  getCollabRequests: (params?: { status?: 'pending' | 'accepted' | 'rejected' }) =>
+    api.get<ApiResponse<CollabRequest[]>>('/user/collab-requests', { params }),
 };
 
 // Skills API
@@ -303,6 +336,8 @@ export const sessionsAPI = {
   
   complete: (id: string, data?: { notes?: string; rating?: number }) =>
     api.patch<ApiResponse<Session>>(`/sessions/${id}/complete`, data),
+
+  remove: (id: string) => api.delete<ApiResponse<null>>(`/sessions/${id}`),
   
   getStats: () => api.get<ApiResponse<{
     totalSessions: number;
@@ -314,6 +349,54 @@ export const sessionsAPI = {
       asStudent: number;
     };
   }>>('/sessions/stats'),
+};
+
+// Projects API
+export const projectsAPI = {
+  getAll: (params?: {
+    search?: string;
+    category?: string;
+    status?: ProjectStatus;
+    tech?: string[] | string;
+    page?: number;
+    limit?: number;
+    sort?: 'newest' | 'oldest';
+  }) => api.get<ApiResponse<{ projects: Project[]; pagination: any }>>('/projects', {
+    params: {
+      ...(params || {}),
+      tech: Array.isArray(params?.tech) ? params?.tech.join(',') : params?.tech,
+    },
+  }),
+
+  getById: (id: string) => api.get<ApiResponse<Project>>(`/projects/${id}`),
+
+  create: (data: {
+    title: string;
+    description: string;
+    category: string;
+    techStack?: string[];
+    githubLink?: string;
+    status?: ProjectStatus;
+  }) => api.post<ApiResponse<Project>>('/projects', data),
+
+  update: (id: string, data: Partial<{
+    title: string;
+    description: string;
+    category: string;
+    techStack: string[];
+    githubLink?: string;
+    status: ProjectStatus;
+  }>) => api.put<ApiResponse<Project>>(`/projects/${id}`, data),
+
+  remove: (id: string) => api.delete<ApiResponse<null>>(`/projects/${id}`),
+
+  requestCollaboration: (id: string, data: { message?: string }) =>
+    api.post<ApiResponse<CollabRequest>>(`/projects/${id}/collab-request`, data),
+};
+
+export const collabRequestsAPI = {
+  accept: (id: string) => api.patch<ApiResponse<CollabRequest>>(`/collab-requests/${id}/accept`),
+  reject: (id: string) => api.patch<ApiResponse<CollabRequest>>(`/collab-requests/${id}/reject`),
 };
 
 // Admin API

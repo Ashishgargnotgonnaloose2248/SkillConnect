@@ -85,6 +85,7 @@ export default function Explorer() {
         available: !!(u as any).isAvailable,
         mode: ((u as any).availabilityMode === 'on-campus' ? 'On-campus' : 'Online') as SkillProfile["mode"],
         linkedin: u.linkedin,
+        email: u.email,
         verified: !!u.isVerified || u.role === 'faculty',
       }));
   }, [usersForSkill, mode]);
@@ -107,7 +108,7 @@ export default function Explorer() {
         </div>
       )}
 
-      <div className="rounded-2xl border bg-white p-4 md:p-5 shadow-sm">
+      <div className="rounded-2xl border border-border bg-card/95 dark:bg-card/80 p-4 md:p-5 shadow-lg/40">
         <div className="flex flex-col md:flex-row gap-3">
           <div className="flex-1">
             <div className="relative">
@@ -117,7 +118,7 @@ export default function Explorer() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search skills, e.g. Figma, Python"
-                className="w-full rounded-xl border bg-background pl-10 pr-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-blue shadow-sm transition-shadow hover:shadow-md"
+                className="w-full rounded-xl border border-border/60 bg-background/80 dark:bg-background/40 pl-10 pr-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-brand-blue shadow-sm transition-shadow hover:shadow-md"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                 <SortDropdown value={sortOption} onChange={setSortOption} />
@@ -173,8 +174,8 @@ export default function Explorer() {
               variant="outline"
               size="sm"
               className={cn(
-                "ml-2 gap-2 transition-colors",
-                showFacultyOnly && "bg-amber-50 text-amber-700 hover:bg-amber-100"
+                "ml-2 gap-2 transition-colors border-border/70 bg-background/70 dark:bg-background/40",
+                showFacultyOnly && "bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-200/20 dark:text-amber-200"
               )}
               onClick={() => setShowFacultyOnly(!showFacultyOnly)}
             >

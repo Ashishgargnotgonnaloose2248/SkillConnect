@@ -195,6 +195,76 @@ export const validateSessionUpdate = [
   validate
 ];
 
+// Project validation rules
+export const validateProjectCreation = [
+  body("title")
+    .trim()
+    .isLength({ min: 4, max: 120 })
+    .withMessage("Project title must be between 4 and 120 characters"),
+  body("description")
+    .trim()
+    .isLength({ min: 20, max: 1500 })
+    .withMessage("Description must be between 20 and 1500 characters"),
+  body("category")
+    .trim()
+    .isLength({ min: 2, max: 60 })
+    .withMessage("Category must be between 2 and 60 characters"),
+  body("techStack")
+    .optional()
+    .customSanitizer((value) => (typeof value === "string" ? value.split(",") : value))
+    .isArray({ max: 15 })
+    .withMessage("Tech stack must be an array with up to 15 entries"),
+  body("techStack.*")
+    .optional()
+    .isString()
+    .withMessage("Each tech stack item must be a string"),
+  body("githubLink")
+    .optional()
+    .isURL()
+    .withMessage("GitHub link must be a valid URL"),
+  body("status")
+    .optional()
+    .isIn(["in-progress", "completed"])
+    .withMessage("Status must be in-progress or completed"),
+  validate
+];
+
+export const validateProjectUpdate = [
+  body("title")
+    .optional()
+    .trim()
+    .isLength({ min: 4, max: 120 })
+    .withMessage("Project title must be between 4 and 120 characters"),
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ min: 20, max: 1500 })
+    .withMessage("Description must be between 20 and 1500 characters"),
+  body("category")
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 60 })
+    .withMessage("Category must be between 2 and 60 characters"),
+  body("techStack")
+    .optional()
+    .customSanitizer((value) => (typeof value === "string" ? value.split(",") : value))
+    .isArray({ max: 15 })
+    .withMessage("Tech stack must be an array with up to 15 entries"),
+  body("techStack.*")
+    .optional()
+    .isString()
+    .withMessage("Each tech stack item must be a string"),
+  body("githubLink")
+    .optional()
+    .isURL()
+    .withMessage("GitHub link must be a valid URL"),
+  body("status")
+    .optional()
+    .isIn(["in-progress", "completed"])
+    .withMessage("Status must be in-progress or completed"),
+  validate
+];
+
 // Parameter validation
 export const validateMongoId = [
   param("id")
@@ -242,6 +312,41 @@ export const validateSkillQuery = [
     .isLength({ min: 2, max: 50 })
     .withMessage("Search term must be between 2 and 50 characters"),
   validatePagination
+];
+
+export const validateProjectQuery = [
+  query("search")
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 120 })
+    .withMessage("Search term must be between 2 and 120 characters"),
+  query("category")
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 60 })
+    .withMessage("Category filter must be between 2 and 60 characters"),
+  query("status")
+    .optional()
+    .isIn(["in-progress", "completed"])
+    .withMessage("Status filter must be in-progress or completed"),
+  query("owner")
+    .optional()
+    .isMongoId()
+    .withMessage("Owner filter must be a valid user id"),
+  query("sort")
+    .optional()
+    .isIn(["newest", "oldest"])
+    .withMessage("Sort must be newest or oldest"),
+  validatePagination
+];
+
+export const validateCollabRequestMessage = [
+  body("message")
+    .optional()
+    .trim()
+    .isLength({ max: 600 })
+    .withMessage("Message must be 600 characters or less"),
+  validate
 ];
 
 // Admin validation

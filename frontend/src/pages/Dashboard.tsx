@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,9 +12,9 @@ import {
   Target
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { userAPI } from '@/lib/api';
+import { userAPI, projectsAPI, collabRequestsAPI, type Project, type CollabRequest, type ProjectStatus } from '@/lib/api';
 import { matchingAPI, sessionsAPI } from '@/lib/api';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import {
@@ -25,10 +25,36 @@ import {
   YAxis,
   ResponsiveContainer,
 } from 'recharts';
+import { useToast } from '@/hooks/use-toast';
+import MyProjectsList from '@/components/projects/MyProjectsList';
+import ProjectForm from '@/components/projects/ProjectForm';
+import CollaborationRequestsPanel from '@/components/projects/CollaborationRequestsPanel';
+
+type ProjectFormPayload = {
+  title: string;
+  description: string;
+  category: string;
+  techStack: string[];
+  githubLink?: string;
+  status: ProjectStatus;
+};
 
 const Dashboard: React.FC = () => {
   const { user, login } = useAuth();
   const [savingAvailability, setSavingAvailability] = React.useState(false);
+  const [projectFormOpen, setProjectFormOpen] = React.useState(false);
+  const [editingProject, setEditingProject] = React.useState<Project | null>(null);
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.hash === '#my-projects') {
+      setTimeout(() => {
+        document.getElementById('my-projects')?.scrollIntoView({ behavior: 'smooth' });
+      }, 200);
+    }
+  }, [location.hash]);
 
   const toggleAvailability = async () => {
     if (!user) return;
@@ -74,10 +100,91 @@ const Dashboard: React.FC = () => {
     retry: false,
   });
 
+  const { data: myProjectsData, isLoading: myProjectsLoading } = useQuery<Project[]>({
+    queryKey: ['my-projects'],
+    queryFn: () => userAPI.getProjects().then(res => res.data.data),
+  });
+
+  const { data: collabRequestsData, isLoading: collabRequestsLoading } = useQuery<CollabRequest[]>({
+    queryKey: ['incoming-collab-requests'],
+    queryFn: () => userAPI.getCollabRequests().then(res => res.data.data),
+  });
+
   // Log errors for debugging
   if (matchingError) console.error('Matching stats error:', matchingError);
   if (sessionError) console.error('Session stats error:', sessionError);
   if (sessionsError) console.error('Recent sessions error:', sessionsError);
+
+  const myProjects = myProjectsData ?? [];
+  const collabRequests = collabRequestsData ?? [];
+
+  const projectMutation = useMutation({
+    mutationFn: ({ id, payload }: { id?: string; payload: ProjectFormPayload }) =>
+      id ? projectsAPI.update(id, payload) : projectsAPI.create(payload),
+    onSuccess: (_, variables) => {
+      toast({
+        title: variables.id ? 'Project updated' : 'Project created',
+        description: 'Changes saved successfully.',
+      });
+      queryClient.invalidateQueries({ queryKey: ['my-projects'] });
+      setProjectFormOpen(false);
+      setEditingProject(null);
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Unable to save project',
+        description: error?.response?.data?.message || 'Try again shortly.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const deleteProjectMutation = useMutation({
+    mutationFn: (projectId: string) => projectsAPI.remove(projectId),
+    onSuccess: () => {
+      toast({ title: 'Project deleted', description: 'Your project has been removed.' });
+      queryClient.invalidateQueries({ queryKey: ['my-projects'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Unable to delete project',
+        description: error?.response?.data?.message || 'Try again shortly.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const collabActionMutation = useMutation({
+    mutationFn: ({ id, action }: { id: string; action: 'accept' | 'reject' }) =>
+      action === 'accept' ? collabRequestsAPI.accept(id) : collabRequestsAPI.reject(id),
+    onSuccess: (_, variables) => {
+      toast({
+        title: variables.action === 'accept' ? 'Request accepted' : 'Request rejected',
+        description: 'The requester has been notified.',
+      });
+      queryClient.invalidateQueries({ queryKey: ['incoming-collab-requests'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Unable to update request',
+        description: error?.response?.data?.message || 'Try again shortly.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleProjectSubmit = async (payload: ProjectFormPayload) => {
+    await projectMutation.mutateAsync({ id: editingProject?._id, payload });
+  };
+
+  const handleDeleteProject = (project: Project) => {
+    if (window.confirm(`Delete ${project.title}? This cannot be undone.`)) {
+      deleteProjectMutation.mutate(project._id);
+    }
+  };
+
+  const handleAcceptRequest = (id: string) => collabActionMutation.mutate({ id, action: 'accept' });
+  const handleRejectRequest = (id: string) => collabActionMutation.mutate({ id, action: 'reject' });
 
   // Debug logs removed for production cleanliness
 
@@ -248,7 +355,7 @@ const Dashboard: React.FC = () => {
           </Button>
             {/* Availability mode and location controls */}
             <select
-              className="border rounded-md text-sm px-2 py-1"
+              className="rounded-xl border border-border bg-card/95 dark:bg-card/70 text-sm px-3 py-2 text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
               value={(user as any)?.availabilityMode || 'online'}
               onChange={async (e) => {
                 if (!user) return;
@@ -261,7 +368,7 @@ const Dashboard: React.FC = () => {
               <option value="on-campus">On-campus</option>
             </select>
             <input
-              className="border rounded-md text-sm px-2 py-1"
+              className="rounded-xl border border-border bg-card/95 dark:bg-card/70 text-sm px-3 py-2 text-foreground shadow-sm placeholder:text-muted-foreground/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
               placeholder="Location (optional)"
               value={(user as any)?.availabilityLocation || ''}
               onChange={async (e) => {
@@ -581,6 +688,30 @@ const Dashboard: React.FC = () => {
         </Card>
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <MyProjectsList
+            projects={myProjects}
+            isLoading={myProjectsLoading}
+            onCreate={() => {
+              setEditingProject(null);
+              setProjectFormOpen(true);
+            }}
+            onEdit={(project) => {
+              setEditingProject(project);
+              setProjectFormOpen(true);
+            }}
+            onDelete={handleDeleteProject}
+          />
+        </div>
+        <CollaborationRequestsPanel
+          requests={collabRequests}
+          isLoading={collabRequestsLoading || collabActionMutation.isPending}
+          onAccept={handleAcceptRequest}
+          onReject={handleRejectRequest}
+        />
+      </div>
+
       {/* Recent Activity */}
       <Card>
         <CardHeader>
@@ -636,6 +767,17 @@ const Dashboard: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
+      <ProjectForm
+        open={projectFormOpen}
+        onOpenChange={(open) => {
+          setProjectFormOpen(open);
+          if (!open) setEditingProject(null);
+        }}
+        onSubmit={handleProjectSubmit}
+        initialData={editingProject}
+        isSubmitting={projectMutation.isPending}
+      />
     </div>
   );
 };

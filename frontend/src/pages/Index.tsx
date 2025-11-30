@@ -5,7 +5,18 @@ import { publicAPI, skillsAPI } from "@/lib/api";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Brand from "@/components/Brand";
-import { BookOpen, Users, Sparkles, Clock, Rocket, Globe, ArrowRight } from "lucide-react";
+import { 
+  BookOpen, 
+  Users, 
+  Sparkles, 
+  Clock, 
+  Rocket, 
+  Globe, 
+  ArrowRight,
+  LayoutDashboard,
+  FolderKanban,
+  Compass
+} from "lucide-react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { motion } from "framer-motion";
 
@@ -23,7 +34,7 @@ export default function Index() {
     staleTime: 60_000,
   });
 
-  const imgWrapRef = React.useRef<HTMLDivElement | null>(null);
+  const imgWrapRef = React.useRef<HTMLButtonElement | null>(null);
 
   // small, accessible parallax effect for the hero illustration (desktop only)
   React.useEffect(() => {
@@ -75,12 +86,12 @@ export default function Index() {
   return (
     <>
       {/* Hero */}
-    <section className="relative overflow-hidden pt-6 md:pt-10 pb-16">
+    <section className="relative overflow-hidden pt-6 md:pt-10 pb-16 bg-gradient-to-b from-background via-background to-background/90">
       <div className="container grid md:grid-cols-2 gap-10 md:gap-14 items-center">
           {/* Left Text Column */}
           <div>
             <Brand size="xl" className="mb-5" />
-            <div className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-2.5 py-1 text-[10px] text-muted-foreground shadow-sm backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/70 dark:bg-card/30 px-2.5 py-1 text-[10px] text-muted-foreground shadow-sm backdrop-blur">
               <span className="inline-flex h-2 w-2 rounded-full bg-brand-green" />
               Real-time availability
             </div>
@@ -103,25 +114,66 @@ export default function Index() {
                 : "A campus-exclusive network where students and faculty exchange skills and knowledge in real-time."
               }
             </motion.p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="mt-7 w-full max-w-2xl space-y-3">
               {isAuthenticated ? (
-                <>
-                  <Button asChild variant="default" className="h-12 px-6">
-                    <Link to="/dashboard">Go to Dashboard</Link>
-                  </Button>
-                  <Button asChild variant="secondary" className="h-12 px-6">
-                    <Link to="/explorer">Explore Skills</Link>
-                  </Button>
-                </>
+                <div className="rounded-2xl border border-border/60 bg-card/90 dark:bg-card/40 p-5 shadow-xl/20">
+                  <div className="flex flex-wrap gap-3">
+                    <Button
+                      asChild
+                      className="h-12 flex-1 min-w-[180px] justify-center bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 shadow-lg shadow-indigo-500/30"
+                    >
+                      <Link to="/dashboard" className="inline-flex items-center gap-2">
+                        <LayoutDashboard className="h-4 w-4" />
+                        Go to Dashboard
+                      </Link>
+                    </Button>
+                    <Button asChild variant="secondary" className="h-12 flex-1 min-w-[160px] justify-center">
+                      <Link to="/explorer" className="inline-flex items-center gap-2">
+                        <Compass className="h-4 w-4" />
+                        Explore Skills
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="h-12 flex-1 min-w-[160px] justify-center">
+                      <Link to="/projects" className="inline-flex items-center gap-2">
+                        <FolderKanban className="h-4 w-4" />
+                        Projects Hub
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-brand-green"></span> Sessions synced</span>
+                    <span className="inline-flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-brand-pink"></span> Project invites</span>
+                    <span className="inline-flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-brand-sky"></span> Skill insights</span>
+                  </div>
+                </div>
               ) : (
-                <>
-                  <Button asChild className="h-12 px-7 text-white bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400">
-                    <Link to="/auth" className="inline-flex items-center gap-2"><Rocket className="h-4 w-4"/> Get Started</Link>
-                  </Button>
-                  <Button asChild variant="outline" className="h-12 px-7">
-                    <Link to="/explorer" className="inline-flex items-center gap-2"><Globe className="h-4 w-4"/> Explore Skills</Link>
-                  </Button>
-                </>
+                <div className="rounded-2xl border border-border/60 bg-brand-blue/5 dark:bg-card/60 p-5 shadow-lg/50">
+                  <div className="flex flex-wrap gap-3">
+                    <Button asChild className="h-12 flex-1 min-w-[180px] justify-center text-white bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400">
+                      <Link to="/auth" className="inline-flex items-center gap-2">
+                        <Rocket className="h-4 w-4" />
+                        Get Started
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="h-12 flex-1 min-w-[160px] justify-center">
+                      <Link to="/explorer" className="inline-flex items-center gap-2">
+                        <Globe className="h-4 w-4" />
+                        Explore Skills
+                      </Link>
+                    </Button>
+                    <Button asChild variant="secondary" className="h-12 flex-1 min-w-[160px] justify-center">
+                      <Link to="/projects" className="inline-flex items-center gap-2">
+                        <FolderKanban className="h-4 w-4" />
+                        Browse Projects
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-2"><Users className="h-3.5 w-3.5" /> Peer mentors</span>
+                    <span className="inline-flex items-center gap-2"><BookOpen className="h-3.5 w-3.5" /> Faculty office hours</span>
+                    <span className="inline-flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Real-time availability</span>
+                  </div>
+                </div>
               )}
             </div>
             <div className="mt-5 flex items-center gap-4 text-xs text-muted-foreground">
@@ -178,7 +230,7 @@ export default function Index() {
             </DialogContent>
           </Dialog>
           <motion.div
-            className="w-full max-w-xl rounded-2xl bg-white/90 p-6 shadow-lg backdrop-blur"
+            className="w-full max-w-xl rounded-2xl border border-border/60 bg-card/95 dark:bg-card/80 p-6 shadow-lg/60 backdrop-blur"
             role="region"
             aria-label="Feature highlights"
             initial="hidden"
@@ -258,7 +310,7 @@ export default function Index() {
           {/* Peer Learning Card */}
           <Link
             to="/explorer"
-            className="group block rounded-2xl border bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg animate-fade-in-up focus:outline-none focus:ring-2 focus:ring-brand-blue"
+            className="group block rounded-2xl border border-border/70 bg-card/95 dark:bg-card/80 p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl animate-fade-in-up focus:outline-none focus:ring-2 focus:ring-brand-blue"
             aria-label="Explore peer learning"
           >
             <div className="flex items-start justify-between">
@@ -291,7 +343,7 @@ export default function Index() {
           {/* Faculty Access Card */}
           <Link
             to="/connect-faculty"
-            className="group block rounded-2xl border bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg animate-fade-in-up animate-delay-1 focus:outline-none focus:ring-2 focus:ring-brand-sky"
+            className="group block rounded-2xl border border-border/70 bg-card/95 dark:bg-card/80 p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl animate-fade-in-up animate-delay-1 focus:outline-none focus:ring-2 focus:ring-brand-sky"
             aria-label="Connect with faculty"
           >
             <div className="flex items-start justify-between">
@@ -324,7 +376,7 @@ export default function Index() {
           {/* AI Assistant Card */}
           <Link
             to="/explorer"
-            className="group block rounded-2xl border bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg animate-fade-in-up animate-delay-2 focus:outline-none focus:ring-2 focus:ring-brand-pink"
+            className="group block rounded-2xl border border-border/70 bg-card/95 dark:bg-card/80 p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl animate-fade-in-up animate-delay-2 focus:outline-none focus:ring-2 focus:ring-brand-pink"
             aria-label="AI assistant"
           >
             <div className="flex items-start justify-between">
@@ -370,15 +422,15 @@ export default function Index() {
       <section className="container py-8">
         <h2 className="text-2xl font-bold">How it works</h2>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border bg-brand-sky/5 p-5 animate-fade-in-up">
+          <div className="rounded-2xl border border-border/60 bg-brand-sky/10 dark:bg-brand-sky/20 p-5 animate-fade-in-up">
             <p className="text-sm font-medium text-brand-blue">1. Create profile</p>
             <p className="mt-1 text-sm text-muted-foreground">Add skills to teach and learn, plus LinkedIn.</p>
           </div>
-          <div className="rounded-2xl border bg-brand-sky/5 p-5 animate-fade-in-up animate-delay-1">
+          <div className="rounded-2xl border border-border/60 bg-brand-sky/10 dark:bg-brand-sky/20 p-5 animate-fade-in-up animate-delay-1">
             <p className="text-sm font-medium text-brand-blue">2. Set availability</p>
             <p className="mt-1 text-sm text-muted-foreground">Toggle Online or On-campus and time slots.</p>
           </div>
-          <div className="rounded-2xl border bg-brand-sky/5 p-5 animate-fade-in-up animate-delay-2">
+          <div className="rounded-2xl border border-border/60 bg-brand-sky/10 dark:bg-brand-sky/20 p-5 animate-fade-in-up animate-delay-2">
             <p className="text-sm font-medium text-brand-blue">3. Connect & learn</p>
             <p className="mt-1 text-sm text-muted-foreground">Use Skill Explorer to find a match and start.</p>
           </div>
@@ -444,7 +496,7 @@ function StatCard({ label, value }: { label: string; value?: number }) {
     return () => clearInterval(id);
   }, [value]);
   return (
-    <div className="rounded-2xl border bg-white p-5 text-center">
+    <div className="rounded-2xl border border-border bg-card/95 dark:bg-card/80 p-5 text-center shadow-md">
       <p className="text-3xl font-extrabold text-brand-blue">{typeof value === 'number' ? display : '--'}</p>
       <p className="text-sm text-muted-foreground">{label}</p>
     </div>

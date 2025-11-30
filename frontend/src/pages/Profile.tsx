@@ -71,7 +71,7 @@ const Profile: React.FC = () => {
   const { data: allSkillsForSeeking } = useQuery({
     queryKey: ['all-skills-seeking', seekingSkillSearch, seekingSkillCategory],
     queryFn: () => skillsAPI.getAll({
-      limit: 1000, // Much higher limit for more variety
+      limit: 100, // API caps limit at 100 via validation
       ...(seekingSkillSearch.trim().length >= 2 ? { search: seekingSkillSearch.trim() } : {}),
       ...(seekingSkillCategory !== 'all' ? { category: seekingSkillCategory } : {}),
     }).then(res => res.data.data.skills),

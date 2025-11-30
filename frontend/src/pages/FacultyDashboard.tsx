@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/AuthContext';
-import { userAPI } from '@/lib/api';
+import { userAPI, User } from '@/lib/api';
 import { 
   Clock, 
   Calendar, 
@@ -43,18 +43,22 @@ const FacultyDashboard: React.FC = () => {
   }>>([]);
 
   // Fetch user profile
-  const { data: profile, isLoading } = useQuery({
+  const { data: profile, isLoading } = useQuery<User>({
     queryKey: ['user-profile'],
     queryFn: () => userAPI.getProfile().then(res => res.data.data),
-    onSuccess: (data) => {
-      if (data.currentStatus) {
-        setLocalStatus(data.currentStatus);
-      }
-      if (data.dailyAvailability && data.dailyAvailability.length > 0) {
-        setDailyAvailability(data.dailyAvailability);
-      }
-    },
   });
+
+  useEffect(() => {
+    if (!profile) {
+      return;
+    }
+    if (profile.currentStatus) {
+      setLocalStatus(profile.currentStatus);
+    }
+    if (profile.dailyAvailability && profile.dailyAvailability.length > 0) {
+      setDailyAvailability(profile.dailyAvailability);
+    }
+  }, [profile]);
 
   // Update current status mutation
   const updateStatusMutation = useMutation({
